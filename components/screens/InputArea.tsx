@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 7,
     marginVertical: 2,
+    fontFamily: "open-sans-bold",
   },
   input: {
     borderBottomColor: "black",

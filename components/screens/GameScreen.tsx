@@ -1,12 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Button, Alert } from "react-native";
 import Card from "../Card";
+import GameOver from "./GameOver";
 
 interface Props {
   chosenNumber: number;
+  setNumberOfRounds: Function;
+  numberOfRounds: number;
+  restartGame: Function;
 }
 
-const GameScreen = ({ chosenNumber }: Props) => {
+const GameScreen = ({
+  chosenNumber,
+  setNumberOfRounds,
+  numberOfRounds,
+  restartGame,
+}: Props) => {
   const [guessedNumber, setGuessNumber] = useState<number>(0);
   const [found, setFound] = useState<boolean>(false);
 
@@ -38,6 +47,7 @@ const GameScreen = ({ chosenNumber }: Props) => {
     const check = generateRandomNumberBetween(low.current, high.current);
 
     setGuessNumber(check);
+    setNumberOfRounds((prevNum: number) => prevNum + 1);
   };
   useEffect(() => {
     setGuessNumber(generateRandomNumberBetween(0, 99));
@@ -52,7 +62,7 @@ const GameScreen = ({ chosenNumber }: Props) => {
   return (
     <View>
       {found ? (
-        <Text>FOUND</Text>
+        <GameOver numberOfRounds={numberOfRounds} restartGame={restartGame} />
       ) : (
         <Card>
           <Text>{guessedNumber}</Text>
