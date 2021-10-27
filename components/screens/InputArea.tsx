@@ -1,27 +1,70 @@
-import React from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Alert,
+} from "react-native";
 
 interface Props {
   title: string;
-  placeholder: string;
 }
 
-const InputArea = ({ title, placeholder }: Props) => {
+const InputArea = ({ title }: Props) => {
+  const [enteredValue, setEnteredValue] = useState<string>("");
+  const [confirmed, setConfirmed] = useState<boolean>(false);
+  const [chosenNumber, setChosenNumber] = useState<number | null>(null);
+
+  const numberInputHandler = (inputText: string) => {
+    setEnteredValue(inputText.replace(/[^0-9]/g, ""));
+  };
+
+  const confirmInputHandler = () => {
+    const parsed = parseInt(enteredValue);
+    if (isNaN(parsed) || parsed > 99 || parsed <= 0) {
+      Alert.alert("Please Enter a Valid Number");
+      return;
+    }
+    setConfirmed(true);
+    setChosenNumber(parsed);
+  };
+
   return (
-    <View style={styles.screen}>
-      <View style={styles.inputContainer}>
-        <Text>{title}</Text>
-        <TextInput
-          keyboardType="number-pad"
-          placeholder={placeholder}
-          style={styles.input}
-        />
-        <View style={styles.bottomContainer}>
-          <Button title="Reset" onPress={() => {}} color="red"></Button>
-          <Button title="Confirm" onPress={() => {}}></Button>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.screen}>
+        <View style={styles.inputContainer}>
+          <Text>{title}</Text>
+          <TextInput
+            textAlign="center"
+            keyboardType="number-pad"
+            style={styles.input}
+            maxLength={2}
+            onChangeText={numberInputHandler}
+            value={enteredValue}
+          />
+          <View style={styles.bottomContainer}>
+            <Button
+              title="Reset"
+              onPress={() => {
+                setEnteredValue("");
+                setChosenNumber(null);
+              }}
+              color="red"
+            ></Button>
+            <Button title="Confirm" onPress={confirmInputHandler}></Button>
+          </View>
         </View>
+        {chosenNumber ? (
+          <Text>Chosen Number is: {chosenNumber}</Text>
+        ) : (
+          <Text />
+        )}
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -41,11 +84,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     elevation: 5,
     borderRadius: 7,
+    marginVertical: 2,
   },
   input: {
     borderBottomColor: "black",
     borderBottomWidth: 1,
-    width: 200,
+    width: 30,
     maxWidth: "80%",
     margin: 20,
   },

@@ -7,7 +7,7 @@ export default function App() {
     <View style={styles.screen}>
       <Header title="Guess a Number" />
       <Text style={styles.title}>Start a New Game</Text>
-      <InputArea title="Select a Number" placeholder="Choose a Number" />
+      <InputArea title="Select a Number" />
     </View>
   );
 }
