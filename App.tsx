@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Header from "./components/Header";
+import GameScreen from "./components/screens/GameScreen";
 import InputArea from "./components/screens/InputArea";
+
 export default function App() {
   const [startGame, setStartGame] = useState<boolean>(false);
+  const [chosenNumber, setChosenNumber] = useState<number>(0);
   return (
     <View style={styles.screen}>
       <Header title="Guess a Number" />
       <Text style={styles.title}>Start a New Game</Text>
       {!startGame ? (
-        <InputArea setStartGame={setStartGame} title="Select a Number" />
+        <InputArea
+          chosenNumber={chosenNumber}
+          setStartGame={setStartGame}
+          setChosenNumber={setChosenNumber}
+          title="Select a Number"
+        />
       ) : (
-        <Text>Game Component</Text>
+        <GameScreen chosenNumber={chosenNumber} />
       )}
     </View>
   );

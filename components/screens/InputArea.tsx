@@ -15,12 +15,18 @@ import Colors from "../../constants/Colors";
 interface Props {
   title: string;
   setStartGame: Function;
+  setChosenNumber: Function;
+  chosenNumber: number;
 }
 
-const InputArea = ({ title, setStartGame }: Props) => {
+const InputArea = ({
+  title,
+  setStartGame,
+  setChosenNumber,
+  chosenNumber,
+}: Props) => {
   const [enteredValue, setEnteredValue] = useState<string>("");
   const [confirmed, setConfirmed] = useState<boolean>(false);
-  const [chosenNumber, setChosenNumber] = useState<number | null>(null);
 
   const numberInputHandler = (inputText: string) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ""));
