@@ -9,12 +9,15 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
+import Card from "../Card";
+import Colors from "../../constants/Colors";
 
 interface Props {
   title: string;
+  setStartGame: Function;
 }
 
-const InputArea = ({ title }: Props) => {
+const InputArea = ({ title, setStartGame }: Props) => {
   const [enteredValue, setEnteredValue] = useState<string>("");
   const [confirmed, setConfirmed] = useState<boolean>(false);
   const [chosenNumber, setChosenNumber] = useState<number | null>(null);
@@ -31,7 +34,23 @@ const InputArea = ({ title }: Props) => {
     }
     setConfirmed(true);
     setChosenNumber(parsed);
+    Keyboard.dismiss();
   };
+
+  const confirmationCard = (
+    <>
+      <Text>The Number You Chose is:</Text>
+      <Text style={styles.confirmNumber}>{chosenNumber}</Text>
+      <View>
+        <Button
+          title={"Start Game"}
+          onPress={() => {
+            setStartGame(true);
+          }}
+        />
+      </View>
+    </>
+  );
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -58,11 +77,7 @@ const InputArea = ({ title }: Props) => {
             <Button title="Confirm" onPress={confirmInputHandler}></Button>
           </View>
         </View>
-        {chosenNumber ? (
-          <Text>Chosen Number is: {chosenNumber}</Text>
-        ) : (
-          <Text />
-        )}
+        {chosenNumber ? <Card children={confirmationCard}></Card> : <Text />}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -93,7 +108,17 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
     margin: 20,
   },
-
+  confirmNumber: {
+    color: Colors.primary,
+    borderColor: Colors.primary,
+    borderWidth: 2,
+    borderRadius: 4,
+    fontSize: 40,
+    padding: 8,
+    shadowColor: "black",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.36,
+  },
   bottomContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
