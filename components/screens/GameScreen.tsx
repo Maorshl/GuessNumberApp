@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Button, Alert } from "react-native";
 import Card from "../Card";
 import GameOver from "./GameOver";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   chosenNumber: number;
@@ -44,14 +45,17 @@ const GameScreen = ({
     } else {
       low.current = guessedNumber;
     }
+
     const check = generateRandomNumberBetween(low.current, high.current);
 
     setGuessNumber(check);
     setNumberOfRounds((prevNum: number) => prevNum + 1);
   };
+
   useEffect(() => {
     setGuessNumber(generateRandomNumberBetween(0, 99));
   }, []);
+
   useEffect(() => {
     if (guessedNumber === chosenNumber) {
       setFound(true);
@@ -60,20 +64,36 @@ const GameScreen = ({
   }, [guessedNumber]);
 
   return (
-    <View>
+    <View style={styles.card}>
       {found ? (
         <GameOver numberOfRounds={numberOfRounds} restartGame={restartGame} />
       ) : (
         <Card>
           <Text>{guessedNumber}</Text>
-          <Button title="Smaller" onPress={() => nextGuess("lower")} />
-          <Button title="Greater" onPress={() => nextGuess("higher")} />
+          <View style={styles.gameButtons}>
+            <Button
+              title="Lower"
+              onPress={() => nextGuess("lower")}
+              color="red"
+            />
+            <Button title="Greater" onPress={() => nextGuess("higher")} />
+          </View>
         </Card>
       )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  gameButtons: {
+    flexDirection: "row",
+    padding: 20,
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  card: {
+    width: "90%",
+  },
+});
 
 export default GameScreen;
