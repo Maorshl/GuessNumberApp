@@ -1,10 +1,24 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import Header from "./components/Header";
 import GameScreen from "./components/screens/GameScreen";
 import InputArea from "./components/screens/InputArea";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
+import { createStore, combineReducers } from "redux";
+import { Provider } from "react-redux";
+import gameReducer from "./store/reducers/game";
+
+const rootReducer = combineReducers({ gameReducer });
+
+const store = createStore(rootReducer);
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -36,25 +50,31 @@ export default function App() {
   }
 
   return (
-    <View style={styles.screen}>
-      <Header title="Guess a Number" />
-      <Text style={styles.title}>Start a New Game</Text>
-      {!startGame ? (
-        <InputArea
-          chosenNumber={chosenNumber}
-          setStartGame={setStartGame}
-          setChosenNumber={setChosenNumber}
-          title="Select a Number"
-        />
-      ) : (
-        <GameScreen
-          restartGame={restartGame}
-          chosenNumber={chosenNumber}
-          setNumberOfRounds={setNumberOfRounds}
-          numberOfRounds={numberOfRounds}
-        />
-      )}
-    </View>
+    <Provider store={store}>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView>
+          <View style={styles.screen}>
+            <Header title="Guess a Number" />
+            <Text style={styles.title}>Start a New Game</Text>
+            {!startGame ? (
+              <InputArea
+                chosenNumber={chosenNumber}
+                setStartGame={setStartGame}
+                setChosenNumber={setChosenNumber}
+                title="Select a Number"
+              />
+            ) : (
+              <GameScreen
+                restartGame={restartGame}
+                chosenNumber={chosenNumber}
+                setNumberOfRounds={setNumberOfRounds}
+                numberOfRounds={numberOfRounds}
+              />
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </Provider>
   );
 }
 
@@ -66,5 +86,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 20,
+  },
+  safeArea: {
+    height: Dimensions.get("screen").height,
   },
 });
