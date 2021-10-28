@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Button, Alert } from "react-native";
 import Card from "../Card";
 import GameOver from "./GameOver";
-import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   chosenNumber: number;
