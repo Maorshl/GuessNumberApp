@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, StyleSheet, Button, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  Alert,
+  Dimensions,
+} from "react-native";
 import Card from "../Card";
 import GameOver from "./GameOver";
 
@@ -91,7 +98,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   card: {
-    width: "90%",
+    // width: Dimensions.get("window").width,
+    maxWidth: Dimensions.get("window").width / 1.2,
   },
 });
 
