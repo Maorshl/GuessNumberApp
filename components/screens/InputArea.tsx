@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import Card from "../Card";
 import Colors from "../../constants/Colors";
+import { useDispatch } from "react-redux";
+import { chooseNumber } from "../../store/actions/game.js";
 
 interface Props {
   title: string;
@@ -40,8 +42,11 @@ const InputArea = ({
     }
     setConfirmed(true);
     setChosenNumber(parsed);
+    disPatch(chooseNumber(parsed));
     Keyboard.dismiss();
   };
+
+  const disPatch = useDispatch();
 
   const confirmationCard = (
     <>

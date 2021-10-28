@@ -14,9 +14,9 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
-import gameReducer from "./store/reducers/game";
+import gameReducer from "./store/reducers/game.js";
 
-const rootReducer = combineReducers({ gameReducer });
+const rootReducer = combineReducers<Combined>({ game: gameReducer });
 
 const store = createStore(rootReducer);
 

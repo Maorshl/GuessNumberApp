@@ -4,7 +4,12 @@ const initialState: State = {
   numberOfRounds: 0,
 };
 
-const gameReducer = (state: State = initialState, action) => {
+const gameReducer = (state: State = initialState, action: Action) => {
+  switch (action.type) {
+    case "choose":
+      state.chosenNumber = action.chosen;
+      break;
+  }
   return state;
 };
 
@@ -14,4 +19,8 @@ interface State {
   chosenNumber: number;
   startGame: boolean;
   numberOfRounds: number;
+}
+interface Action {
+  type: string;
+  [props: string]: any;
 }

@@ -1,14 +1,23 @@
 import React from "react";
 import { StyleSheet, Text, View, Platform } from "react-native";
+import { useSelector } from "react-redux";
 
 interface Props {
   title: string;
 }
 
+interface Combined {
+  game: { chosenNumber: number };
+}
+
 const Header = ({ title }: Props) => {
+  const chosenNumber = useSelector(
+    (state: Combined) => state.game.chosenNumber
+  );
   return (
     <View style={styles.header}>
       <Text style={styles.headerTitle}>{title}</Text>
+      <Text>{chosenNumber}</Text>
     </View>
   );
 };
