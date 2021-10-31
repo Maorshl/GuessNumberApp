@@ -13,10 +13,11 @@ import InputArea from "./components/screens/InputArea";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { createStore, combineReducers } from "redux";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import gameReducer from "./store/reducers/game.js";
+import { chooseNumber } from "./store/actions/game";
 
-const rootReducer = combineReducers<Combined>({ game: gameReducer });
+const rootReducer = combineReducers<any>({ game: gameReducer });
 
 const store = createStore(rootReducer);
 
@@ -35,7 +36,6 @@ export default function App() {
 
   const restartGame = () => {
     setStartGame(false);
-    setChosenNumber(0);
     setNumberOfRounds(0);
   };
 
@@ -57,16 +57,10 @@ export default function App() {
             <Header title="Guess a Number" />
             <Text style={styles.title}>Start a New Game</Text>
             {!startGame ? (
-              <InputArea
-                chosenNumber={chosenNumber}
-                setStartGame={setStartGame}
-                setChosenNumber={setChosenNumber}
-                title="Select a Number"
-              />
+              <InputArea setStartGame={setStartGame} title="Select a Number" />
             ) : (
               <GameScreen
                 restartGame={restartGame}
-                chosenNumber={chosenNumber}
                 setNumberOfRounds={setNumberOfRounds}
                 numberOfRounds={numberOfRounds}
               />
