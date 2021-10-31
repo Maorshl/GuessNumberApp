@@ -1,13 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 import { Text, View, StyleSheet, Button, Image } from "react-native";
+import { useSelector } from "react-redux";
 import Card from "../Card";
 
 interface Props {
-  numberOfRounds: number;
   restartGame: Function;
 }
+interface State {
+  game: {
+    numberOfRounds: number;
+  };
+}
 
-const GameOver = ({ numberOfRounds, restartGame }: Props) => {
+const GameOver = ({ restartGame }: Props) => {
+  const numberOfRounds = useSelector(
+    (state: State) => state.game.numberOfRounds
+  );
   return (
     <Card style={styles.gameOverCard}>
       <View>
