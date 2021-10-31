@@ -9,16 +9,25 @@ import {
 } from "react-native";
 import Card from "../Card";
 import GameOver from "./GameOver";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addRound,
+  chooseNumber,
+  startGame,
+  restartGameRedux,
+} from "../../store/actions/game.js";
 
 interface Props {
-  chosenNumber: number;
   setNumberOfRounds: Function;
   numberOfRounds: number;
   restartGame: Function;
 }
 
+interface Combined {
+  game: { chosenNumber: number };
+}
+
 const GameScreen = ({
-  chosenNumber,
   setNumberOfRounds,
   numberOfRounds,
   restartGame,
@@ -26,6 +35,8 @@ const GameScreen = ({
   const [guessedNumber, setGuessNumber] = useState<number>(0);
   const [found, setFound] = useState<boolean>(false);
 
+  const reduxNumber = useSelector((state: Combined) => state.game.chosenNumber);
+  const disPatch = useDispatch();
   const low = useRef(1);
   const high = useRef(99);
 
@@ -38,8 +49,8 @@ const GameScreen = ({
 
   const nextGuess = (direction: string) => {
     if (
-      (direction === "lower" && guessedNumber < chosenNumber) ||
-      (direction === "higher" && guessedNumber > chosenNumber)
+      (direction === "lower" && guessedNumber < reduxNumber) ||
+      (direction === "higher" && guessedNumber > reduxNumber)
     ) {
       Alert.alert("Don't lie", "You know that is wrong...", [
         { text: "Sorry", style: "cancel" },
@@ -56,6 +67,7 @@ const GameScreen = ({
 
     setGuessNumber(check);
     setNumberOfRounds((prevNum: number) => prevNum + 1);
+    disPatch(addRound());
   };
 
   useEffect(() => {
@@ -63,7 +75,7 @@ const GameScreen = ({
   }, []);
 
   useEffect(() => {
-    if (guessedNumber === chosenNumber) {
+    if (guessedNumber === reduxNumber) {
       setFound(true);
       return;
     }
@@ -72,7 +84,14 @@ const GameScreen = ({
   return (
     <View style={styles.card}>
       {found ? (
-        <GameOver numberOfRounds={numberOfRounds} restartGame={restartGame} />
+        <GameOver
+          restartGame={() => {
+            restartGame();
+            disPatch(chooseNumber(0));
+            disPatch(startGame(false));
+            disPatch(restartGameRedux());
+          }}
+        />
       ) : (
         <Card>
           <Text>{guessedNumber}</Text>
@@ -98,7 +117,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   card: {
-    // width: Dimensions.get("window").width,
     maxWidth: Dimensions.get("window").width / 1.2,
   },
 });
