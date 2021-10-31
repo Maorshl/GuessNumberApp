@@ -15,7 +15,7 @@ import {
   chooseNumber,
   startGame,
   restartGameRedux,
-} from "../../store/actions/game.js";
+} from "../../store/actions/game";
 
 interface Props {
   setNumberOfRounds: Function;
