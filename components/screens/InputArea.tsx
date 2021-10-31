@@ -11,28 +11,29 @@ import {
 } from "react-native";
 import Card from "../Card";
 import Colors from "../../constants/Colors";
-import { useDispatch } from "react-redux";
-import { chooseNumber } from "../../store/actions/game.js";
+import { useDispatch, useSelector } from "react-redux";
+import { chooseNumber, startGame } from "../../store/actions/game.js";
 
 interface Props {
   title: string;
   setStartGame: Function;
-  setChosenNumber: Function;
-  chosenNumber: number;
 }
 
-const InputArea = ({
-  title,
-  setStartGame,
-  setChosenNumber,
-  chosenNumber,
-}: Props) => {
+interface Combined {
+  game: { chosenNumber: number; startGame: boolean };
+}
+
+const InputArea = ({ title, setStartGame }: Props) => {
   const [enteredValue, setEnteredValue] = useState<string>("");
   const [confirmed, setConfirmed] = useState<boolean>(false);
 
   const numberInputHandler = (inputText: string) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ""));
   };
+
+  const reduxNumber = useSelector((state: Combined) => state.game.chosenNumber);
+
+  const disPatch = useDispatch();
 
   const confirmInputHandler = () => {
     const parsed = parseInt(enteredValue);
@@ -41,22 +42,20 @@ const InputArea = ({
       return;
     }
     setConfirmed(true);
-    setChosenNumber(parsed);
     disPatch(chooseNumber(parsed));
     Keyboard.dismiss();
   };
 
-  const disPatch = useDispatch();
-
   const confirmationCard = (
     <>
       <Text>The Number You Chose is:</Text>
-      <Text style={styles.confirmNumber}>{chosenNumber}</Text>
+      <Text style={styles.confirmNumber}>{reduxNumber}</Text>
       <View>
         <Button
           title={"Start Game"}
           onPress={() => {
             setStartGame(true);
+            disPatch(startGame(true));
           }}
         />
       </View>
@@ -81,14 +80,14 @@ const InputArea = ({
               title="Reset"
               onPress={() => {
                 setEnteredValue("");
-                setChosenNumber(null);
+                disPatch(chooseNumber(0));
               }}
               color="red"
             ></Button>
             <Button title="Confirm" onPress={confirmInputHandler}></Button>
           </View>
         </View>
-        {chosenNumber ? <Card children={confirmationCard}></Card> : <Text />}
+        {reduxNumber ? <Card children={confirmationCard}></Card> : <Text />}
       </View>
     </TouchableWithoutFeedback>
   );
