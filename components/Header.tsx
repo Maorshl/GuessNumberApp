@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Platform } from "react-native";
+import { StyleSheet, Text, View, Platform, Dimensions } from "react-native";
 import { useSelector } from "react-redux";
 
 interface Props {
@@ -7,17 +7,15 @@ interface Props {
 }
 
 interface Combined {
-  game: { chosenNumber: number };
+  game: { startGame: boolean; numberOfRounds: number };
 }
 
 const Header = ({ title }: Props) => {
-  const chosenNumber = useSelector(
-    (state: Combined) => state.game.chosenNumber
-  );
+  const start = useSelector((state: Combined) => state.game.startGame);
+
   return (
     <View style={styles.header}>
       <Text style={styles.headerTitle}>{title}</Text>
-      <Text>{chosenNumber}</Text>
     </View>
   );
 };
@@ -32,7 +30,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 23,
+    marginBottom: "auto",
   },
 });
 
